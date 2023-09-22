@@ -1,0 +1,17 @@
+{
+	"folders":
+	[
+		{
+			"path": "/run/media/joao/aece78a6-d8bc-49c6-99ff-0a08435e2d0d/Projetos/Projeto/RedeNeural",
+		}
+	],
+	"debugger_configurations":
+	[
+		{
+			"name": "Python: Current File",
+			"type": "python",
+			"request": "launch",
+			"program": "${file}"
+		},
+	],
+}
