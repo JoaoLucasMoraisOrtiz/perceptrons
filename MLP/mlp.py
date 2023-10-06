@@ -294,8 +294,27 @@ a = 0
 
 dataset = handleIris('/mnt/usb-Generic_STORAGE_DEVICE_000000000819-0:0-part1/documentos/perceptrons/MLP/iris.data')
 #shuffle(dataset)
-data = dataset[0:113]
-test = dataset[113:]
+
+#setando os casos a serem apresentados para a rede no treinamento
+data = dataset[0:37]
+
+for l in range(50, 87):
+    data.append(dataset[l])
+
+for l in range(100, 137):
+    data.append(dataset[l])
+
+shuffle(data)
+
+#setando os casos para o teste da rede
+test = dataset[37:50]
+
+for l in range(86, 99):
+    test.append(dataset[l])
+
+for l in range(137, 150):
+    test.append(dataset[l])
+
 
 for c in range(0, len(neuroniosEntrada)):
     for i in range(0, len(neuroniosEntrada[c][0])):
