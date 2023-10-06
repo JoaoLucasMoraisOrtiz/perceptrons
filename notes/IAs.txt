@@ -1,0 +1,46 @@
+Resumo anotado para a fixação dos conhecimentos adquiridos com o livro Inteligência Artificial.
+
+1º fundamentos:
+Nesta primeira parte, que se refere a primeira e a segunda parte do livro, vamos nos atentar à "o que é uma IA", e como podemos obter soluções de problemas de IA.
+Pode parecer estranho a princípio o início tão básico, mas é fundamental para não sobrarem lacunas dentro dos estudos que atrapalharão os conceitos mais avançados.
+Algumas partes do livro estão desatualizadas com base nos conhecimentos atuais, portanto eu irei comentar as que eu perceber.
+
+Uma inteligência artificial precisa de conhecimento. Mais que isto, uma inteligência artificial é um método que explora o conhecimento e deve ser:
+    * capaz de capturar generalizações: não ser necessário apresentar para ele todos os casos separadamente. A partir de uma amostra, ele consegue deduzir outros casos.
+    * precisa ser compreendido pelas pessoas que o fornecem: grande parte dos conhecimentos são passados pelas pessoas que utilizam a IA, portanto elas devem conseguir compreender o que precisam informar ao programa.
+    * ele precisa ser facilmente modificado: isto permite corrigir erros e refletir mudanças do mundo ou de nossa visão de mundo.
+
+Posto isto, problemas básicos de IA geralmente contém:
+    * busca: com base em um banco de conhecimentos, encontra uma resposta para o caso que lhe é apresentado.
+    * uso do conhecimento: proporcina uma forma de solucionar problemas complexos particionando problemas existentes.
+    * abstração: a capacidade de encontrar as variáveis, regras e condições necessárias para a resolução do problema.
+
+As IAs também podem ser separadas em 2 modelos: os que tentam fazer as coisas como pessoas, e os que tentam fazer as coisas da melhor forma que ele conseguir.
+Esta distinção é importante pois as vezes não queremos a melhor resposta, ou queremos que o computador pense como um humano, e não da forma que lhe é mais conveniente.
+
+Para que uma IA solucione um problema particular é necessário fazer 4 coisas:
+    * Definir o problema precisamente:
+        para esta parte da tarefa, dividimos em direita e esquerda, ou seja, entrada e resposta esperada. É preciso definir muito bem esta parte,
+        mesmo que em alguns casos isto possa não ser muito bem definido, p. ex. o jogo snake, nele o seu objetivo é ficar vivo, mas também é comer as 
+        frutinhas. Não morrer é um sucesso, mas comer as frutinhas também. É preciso ensinar o programa a como identificar bons resultados e ótimos 
+        resultados.
+    * Analisar o problema: 
+        Algumas características importantes podem ter um enorme impacto sobre as técnicas que utilizaremos para a solução do 
+        problema.
+    * Isolar e representar o conhecimento de tarefa necessário para solucionar o problema:
+        Esta parte virá mais adiante
+    * Escolher a melhor ou as melhores técnicas de solução de problemas e aplica-las àquele problema.
+
+Passando para a primeira parte: Definir o problema precisamente:
+podemos definir um problema como uma busca em um espaço de estados, ou seja: dado um estado X, procure um estado Y de resposta.
+Este estado Y de resposta pode ser uma regra de ação, ou seja um conjunto de ações que são válidas para aquele X. Além disto, diferêntes Xs podem apontar para um mesmo Y.
+De forma passo a passo: a fim de proporcionar uma descrição formal de um problema precisamos:
+    * Definir um espaço de estados que contenha todas as configurações possíveis dos objetos relevantes. É claro que é possível definir este espaço
+    sem enumerar todos os seus ítens, usando para isto conjuntos de regras, onde diferêntes Xs apontam para um mesmo Y.
+    * Definir os estados iniciais: apontamos quais são os estados que serão passados no início de nosso programa.
+    * Definir os estados metas: apontar quais estados são os objetivos de nosso programa, que iniciará com o estado inicial.
+    * Definir um conjunto de regras: estas regras descrevem ações (operadores) que ao atuar em um espaço gera outro espaço válido, é este conjunto 
+    que irá ligar os Xs aos Ys. Para isto será necessário pensar:
+        * Quais suposições não-declaradas estão presentes na descrição informal?
+        * que grau de generalidade esta regra deve ter.
+        * quanto do trabalho deve ser pré-computado? (Ex: calcular a derivada de x da função todas as vezes, ou ja passar a derivada genérica da função e só calcular ela em x?)

@@ -1,0 +1,5 @@
+BIAS | Treinamento         | Posição Bias | Correção bias | Val Bias | Nº acertos
+S    | sem shuffle         | Cam. Entrada | N             | -0.5     | 126 era 16
+S    | sem shuffle         | Cam. Entrada | S             | -0.5     | 123 era 29
+S    | em 77 < e < 177     | Cam. Entrada | S             | -0.5     | 123 era 27, mas foi estragado depois
+S    | 20<e<40 120<e<140   | Cam. Entrada | S             | -0.5     | 123 era 8, mas foi estragado depois
