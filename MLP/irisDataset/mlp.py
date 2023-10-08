@@ -327,8 +327,8 @@ for c in range(0, len(neuronioOculto)):
 for c in range(0, len(neuroniosSaida)):
     for i in range(0, len(neuroniosSaida[c][0])):
         neuroniosSaida[c][0][i] = (randint(0,79))/100
-        
-while(e <= 185):    
+
+while(e <= 400):    
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 #seletor de entradas
     for planta in data:
@@ -405,7 +405,7 @@ while(e <= 185):
             if(aprendizado > 0.14):
                 aprendizado -= 0.04
             elif(aprendizado < 0.03):
-                pass
+                aprendizado = 0.01
             else:
                 aprendizado -= 0.02
             a = 0
