@@ -177,7 +177,7 @@ def gradienteErroOculto(camadaSaida, erroSaida, posNeuronioOculto, somatorioOcul
     for neuronioSaida in range(0, len(camadaSaida)):
         #somatório (que é negativo), soma o erro da saida do neurônioSaida multiplicado pelo peso da sua conexão com o neurônio oculto
         somatorio += erroSaida[neuronioSaida] * camadaSaida[neuronioSaida][0][posNeuronioOculto]
-    
+
     #retorna o somatório vezes a derivada da função de ativação em x = somatório do neurônio oculto
     erro = somatorio * derivadaFuncAtivacao1(funcaoAtivacao1(somatorioOculto[posNeuronioOculto]))
     return erro
@@ -571,11 +571,11 @@ for c in range(0, len(neuronioOculto)):
 
 for c in range(0, len(neuronioOculto2)):
     for i in range(20, len(neuronioOculto2[c][0])):
-        neuronioOculto[c][0][i] = (randint(0,79))/100
+        neuronioOculto2[c][0][i] = (randint(0,79))/100
 
 for c in range(0, len(neuronioOculto3)):
     for i in range(20, len(neuronioOculto3[c][0])):
-        neuronioOculto[c][0][i] = (randint(0,79))/100
+        neuronioOculto3[c][0][i] = (randint(0,79))/100
 
 for c in range(0, len(neuroniosSaida)):
     for i in range(0, len(neuroniosSaida[c][0])):
@@ -624,7 +624,7 @@ while(e <= 400):
         # CAMADA DE SAIDA
         erroSaida = []
         erroSaida = gradienteErroSaida(respSaida, expected)
-
+        
         # CAMADA OCULTA 3
         erroOculto3 = []
         for neuronio in range(0, len(neuronioOculto3)):
@@ -637,6 +637,7 @@ while(e <= 400):
 
         # CAMADA OCULTA 1
         erroOculto1 = []
+        print(len(neuronioOculto))
         for neuronio in range(0, len(neuronioOculto)):
             erroOculto1.append(gradienteErroOculto(neuronioOculto2, erroOculto2, neuronio, somOculto1))
  
