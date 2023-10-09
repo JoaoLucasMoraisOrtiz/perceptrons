@@ -624,7 +624,11 @@ while(e <= 400):
         # CAMADA DE SAIDA
         erroSaida = []
         erroSaida = gradienteErroSaida(respSaida, expected)
+<<<<<<< HEAD
         
+=======
+        print(f'{len(neuronioOculto3)} == {len(somOculto3)}, {len(neuronioOculto2)} == {len(somOculto2)}, {len(neuronioOculto)} == {len(somOculto1)}')
+>>>>>>> 96ff279 (problema com o treinamento na camada de entrada)
         # CAMADA OCULTA 3
         erroOculto3 = []
         for neuronio in range(0, len(neuronioOculto3)):

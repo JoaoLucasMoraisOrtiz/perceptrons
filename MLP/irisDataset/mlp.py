@@ -367,7 +367,7 @@ while(e <= 400):
         
         #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
         #treinamento
-        
+        print(len(neuronioOculto), ' == ', len(somCamadaOculta0))
         #camada de saída
         erroSaida = []
 
