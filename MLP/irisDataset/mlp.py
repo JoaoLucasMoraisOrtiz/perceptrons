@@ -116,7 +116,7 @@ def gradienteErroSaida(saidaRede, saidaEsperada):
     erro = []
     for item in range(0, len(saidaEsperada)):
 
-        erro.append((saidaEsperada[item] - saidaRede[item]) * derivadaFuncAtivacao1(saidaRede[item]))
+        erro.append((saidaEsperada[item] - saidaRede[item]) * derivadaFuncAtivacao1(funcaoAtivacao1(saidaRede[item])))
     return erro
 
 def gradienteErroOculto(camadaSaida, erroSaida, posNeuronioOculto, somatorioOculto):
@@ -292,7 +292,7 @@ g = []
 #contador de amplitude
 a = 0
 
-dataset = handleIris('/mnt/usb-Generic_STORAGE_DEVICE_000000000819-0:0-part1/documentos/perceptrons/MLP/iris.data')
+dataset = handleIris('/mnt/usb-Generic_STORAGE_DEVICE_000000000819-0:0-part1/documentos/perceptrons/MLP/irisDataset/iris.data')
 #shuffle(dataset)
 
 #setando os casos a serem apresentados para a rede no treinamento

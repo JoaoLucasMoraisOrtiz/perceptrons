@@ -6,6 +6,42 @@ import math
 from random import shuffle, randint
 import random
 
+def handleData(file_path, answer_patch):
+    dataNum = []
+    expected = []
+    try:
+        with open(file_path, 'r') as file:
+            dataText = file.read().split(';')
+            for i in dataText[:-1]:
+                dataNum.append([ord(item) for item in i[1:-1]])
+    except FileNotFoundError:
+        print(f"O arquivo {file_path} não foi encontrado.")
+    
+    try:
+        with open(answer_patch, 'r') as file:
+            e = file.read().split(';')
+            for i in e[:-1]:
+                expected.append([int(c) for c in i.split(' ')[1:]])
+    except FileNotFoundError:
+        print(f"O arquivo {file_path} não foi encontrado.")
+        
+    for i in expected:
+        print(i)
+
+    exit()
+    for item in range(0, len(dataNum)):
+
+        # o numero de caracteres ASCII aleatórios que serão colocados
+        f = math.ceil( (50-len(dataText[item]))/2 )
+        dataNum[item] = [random.randint(0, 127) for _ in range(0, f )] + dataNum[item] + [random.randint(0, 127) for _ in range(0, f - 1)]
+            
+        if(len(dataNum[item]) < 50):
+            while (len(dataNum[item]) < 50):
+                dataNum[item] = dataNum[item] + [32]
+
+    exit()
+    #return data
+
 def createPattern(n=3):
     """
         cria os vetores para treinamento da rede
@@ -66,7 +102,6 @@ def createPattern(n=3):
                     expectedVector.append(vector.copy())
                 else:
                     realExpected.append(vector.copy())
-
     return vectors, expectedVector, realVectors, realExpected
 
 def funcaoAtivacao1(x):
@@ -75,10 +110,11 @@ def funcaoAtivacao1(x):
         :param x: o valor de x para a função de ativação
         :type x: float
     """
-    #x = round(x, 30)
-    """ if(abs(x) > 489):
-        x = x*490/abs(x) """
+    #não vamos utilizar mais a função sigmóide pois ela esta saturando
     r = 1/(1+(math.e)**(-x))
+
+    #função tangente hiperbólica
+    #r = ((math.e)**(x) - (math.e)**(-x))/((math.e)**(x) + (math.e)**(-x))
     return r
 
 def derivadaFuncAtivacao1(y):
@@ -87,7 +123,11 @@ def derivadaFuncAtivacao1(y):
         :param x: o ponto onde x deve ser derivado
         :type x: float
     """
-    derivada = y * (1.0 - y)
+    #não vamos utilizar a função sigmóide,mas sim a tghiperbólica
+    derivada = funcaoAtivacao1(y) * (1.0 - funcaoAtivacao1(y))
+
+    #no caso da func. tangente hiperbólica, não utilizamos y como sendo resultado de f(x), mas como sendo x puro
+    #derivada =(2/(math.e)**y + (math.e)**(-y))**2
     return derivada
 
 def perceptron(camada, entradas, bias):
@@ -154,7 +194,6 @@ def gradienteErroSaida(saidaRede, saidaEsperada):
     """
     erro = []
     for item in range(0, len(saidaEsperada)):
-
         erro.append((saidaEsperada[item] - saidaRede[item]) * derivadaFuncAtivacao1(saidaRede[item]))
     return erro
 
@@ -179,7 +218,7 @@ def gradienteErroOculto(camadaSaida, erroSaida, posNeuronioOculto, somatorioOcul
         somatorio += erroSaida[neuronioSaida] * camadaSaida[neuronioSaida][0][posNeuronioOculto]
 
     #retorna o somatório vezes a derivada da função de ativação em x = somatório do neurônio oculto
-    erro = somatorio * derivadaFuncAtivacao1(funcaoAtivacao1(somatorioOculto[posNeuronioOculto]))
+    erro = somatorio * derivadaFuncAtivacao1(somatorioOculto[posNeuronioOculto])
     return erro
 
 def correcaoErro(camada, aprendizado, erro, entradaNeuronio):
@@ -537,15 +576,17 @@ neuroniosSaida = [
     [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59], 0.0]
 ]
 
+handleData('/mnt/usb-Generic_STORAGE_DEVICE_000000000819-0:0-part1/documentos/perceptrons/MLP/NNE/dataset.txt', '/mnt/usb-Generic_STORAGE_DEVICE_000000000819-0:0-part1/documentos/perceptrons/MLP/NNE/datasetExpected.txt')
+exit()
 #o nosso bias
-bias = -0.3
-biasOculto1 = -0.3
+bias = -0.12
+biasOculto1 = -0.6
 biasOculto2 = -0.3
-biasOculto3 = -0.3
-biasSaida = -0.3
+biasOculto3 = -0.15
+biasSaida = -0.075
 
 #a nossa taxa de aprendizado
-aprendizado = 0.28
+aprendizado = 0.12
 
 #contador de eras
 e = 0
@@ -559,43 +600,52 @@ g = []
 #contador de amplitude
 a = 0
 
-vectors, expecteds, vectorTest, expectedTest = createPattern(5)
+vectors = createPattern(5)
 
 for c in range(0, len(neuroniosEntrada)):
     for i in range(0, len(neuroniosEntrada[c][0])):
         neuroniosEntrada[c][0][i] = (randint(0,79))/100
 
 for c in range(0, len(neuronioOculto)):
-    for i in range(20, len(neuronioOculto[c][0])):
+    for i in range(0, len(neuronioOculto[c][0])):
         neuronioOculto[c][0][i] = (randint(0,79))/100
 
 for c in range(0, len(neuronioOculto2)):
-    for i in range(20, len(neuronioOculto2[c][0])):
+    for i in range(0, len(neuronioOculto2[c][0])):
         neuronioOculto2[c][0][i] = (randint(0,79))/100
 
 for c in range(0, len(neuronioOculto3)):
-    for i in range(20, len(neuronioOculto3[c][0])):
+    for i in range(0, len(neuronioOculto3[c][0])):
         neuronioOculto3[c][0][i] = (randint(0,79))/100
 
 for c in range(0, len(neuroniosSaida)):
     for i in range(0, len(neuroniosSaida[c][0])):
-        neuroniosSaida[c][0][i] = (randint(0,79))/100
+        neuroniosSaida[c][0][i] = (randint(0,79))/1000
+
+#normalização dos dados
+for count in range(0, len(vectors)):
+    for item in range(0, len(vectors[count])):
+        vectors[count][item] = vectors[count][item]/100
+
+for count in range(0, len(expecteds)):
+    for item in range(0, len(expecteds[count])):
+        expecteds[count][item] = expecteds[count][item]/100
 
 while(e <= 400):    
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 #seletor de entradas
     for x in range(0, len(vectors)):
-        vector = vectors[x]
-        expected = expecteds[x]
-
+        vector = vectors[x][0]
+        expected = vectors[x][1]
+        
         # CALCULO DA PRIMEIRA CAMADA
         #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
         somEntrada = perceptron(neuroniosEntrada, vector, bias)
         respEntrada = respostaCamada(neuroniosEntrada)
-        
+
         # CALCULO DA SEGUNDA CAMADA
         #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-        somOculto1 = perceptron(neuroniosEntrada, respEntrada, biasOculto1)
+        somOculto1 = perceptron(neuronioOculto, respEntrada, biasOculto1)
         respOculto1 = respostaCamada(neuronioOculto)
 
         # CALCULO DA TERCEIRA CAMADA
@@ -625,10 +675,13 @@ while(e <= 400):
         erroSaida = []
         erroSaida = gradienteErroSaida(respSaida, expected)
 <<<<<<< HEAD
+<<<<<<< HEAD
         
 =======
         print(f'{len(neuronioOculto3)} == {len(somOculto3)}, {len(neuronioOculto2)} == {len(somOculto2)}, {len(neuronioOculto)} == {len(somOculto1)}')
 >>>>>>> 96ff279 (problema com o treinamento na camada de entrada)
+=======
+>>>>>>> 12b530f (criando o dataset da NNE. Ele se divide em 2: a 1a parte contem os exemplos textuais, e a segunda o experado que a rede retorne a partir deste exemplos, ou seja: 0 onde é desenho, e 1 onde é informação relevante.)
         # CAMADA OCULTA 3
         erroOculto3 = []
         for neuronio in range(0, len(neuronioOculto3)):
@@ -641,7 +694,6 @@ while(e <= 400):
 
         # CAMADA OCULTA 1
         erroOculto1 = []
-        print(len(neuronioOculto))
         for neuronio in range(0, len(neuronioOculto)):
             erroOculto1.append(gradienteErroOculto(neuronioOculto2, erroOculto2, neuronio, somOculto1))
  
