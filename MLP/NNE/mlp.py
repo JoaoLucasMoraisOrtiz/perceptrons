@@ -338,10 +338,19 @@ def resultados(respCamadaSaida, esperado):
     #exibe a saída esperada da camada
     if(comp == esperado):
         #print(f'ACERTOU')
-        return 1
+        return c
     else:
         #print(f'ERROU')
-        return 0
+        return c
+
+def media(g):
+    m = 0
+    for i in g:
+        m += i
+    
+    m = m/len(g)
+    print(f'-=-=-=-=-=-=-=-=-=-=-=-= média de {m} acertos -=-=-=-=-=-=-=-=-=-=')
+    return m
 
 #camada de entrada
 neuroniosEntrada = [
@@ -667,21 +676,17 @@ biasOculto3 = 0.00 """
 biasSaida = 0.00
 
 #a nossa taxa de aprendizado
-aprendizado = 0.28
+aprendizado = 0.38
 
 #contador de eras
 e = 0
 
 #contador de acertos da era
 c = 0
-
-#contador de acertos global
-g = []
-
-#contador de amplitude
 a = 0
-
-vectors = handleData('/mnt/usb-Generic_STORAGE_DEVICE_000000000819-0:0-part1/documentos/perceptrons/MLP/NNE/dataset.txt', '/mnt/usb-Generic_STORAGE_DEVICE_000000000819-0:0-part1/documentos/perceptrons/MLP/NNE/datasetExpected.txt')
+g = []
+h = []
+vectors = handleData('/home/aluno/perceptrons/MLP/NNE/dataset.txt', '/home/aluno/perceptrons/MLP/NNE/datasetExpected.txt')
 
 for c in range(0, len(neuroniosEntrada)):
     for i in range(0, len(neuroniosEntrada[c][0])):
@@ -750,7 +755,7 @@ for k in range(0, 23):
 
             # RESULTADOS
             #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-            c += resultados(respSaida, expected)
+            g.append(resultados(respSaida, expected))
 
             # TREINAMENTO!
             #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -822,7 +827,7 @@ for k in range(0, 23):
 
         print('-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-')
         print(f'O número de acertos da era foi: {c}')
-        g.append(c)
+        #g.append(c)
         c = 0
         e += 1
         test = []
@@ -830,11 +835,9 @@ for k in range(0, 23):
 
     print(f'o maior número de acertos dos treinamentos foi: {max(g)} na era {g.index(max(g))}')
     e = 0
+    h.append(media(g))
     g = []
     aprendizado -= 0.011
 
-print(neuroniosEntrada)
-print('-=-=-=-=-=-')
-print(neuronioOculto)
-print('-=-=-=-=-=-')
-print(neuroniosSaida)
+for i in h:
+    print(i)
