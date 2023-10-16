@@ -400,7 +400,7 @@ while(e <= 400):
     e += 1
     a += 1
     if(e > 20 and a>20):
-        #se a amplitude do ruido for maior ou igual à 15
+        #se a amplitude do ruido for maior ou igual à 7
         if(max(g[-20:]) - min(g[-20:]) >= 7):
             if(aprendizado > 0.14):
                 aprendizado -= 0.04

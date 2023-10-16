@@ -5,7 +5,7 @@
 """
 import math
 from statistics import median
-from random import randint
+from random import randint, shuffle
 
 def handleData(file_path, answer_patch):
     dataNum = []
@@ -715,6 +715,7 @@ for k in range(0, 23):
         pass
     while(e < len(vectorsBk)):
         test = vectors.pop(e)
+        shuffle(vectors)
         
     #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     #seletor de entradas
