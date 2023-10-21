@@ -676,7 +676,7 @@ biasOculto3 = 0.00 """
 biasSaida = 0.00
 
 #a nossa taxa de aprendizado
-aprendizado = 0.38
+aprendizado = 1
 
 #contador de eras
 e = 0
@@ -837,7 +837,10 @@ for k in range(0, 23):
     e = 0
     h.append(media(g))
     g = []
-    aprendizado -= 0.011
+    aprendizado -= 0.04
 
-for i in h:
-    print(i)
+print(neuroniosEntrada)
+print('-=-=-=-=-=-')
+print(neuronioOculto)
+print('-=-=-=-=-=-')
+print(neuroniosSaida)
