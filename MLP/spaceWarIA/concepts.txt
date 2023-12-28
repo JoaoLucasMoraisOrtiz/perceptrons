@@ -1,0 +1,102 @@
+* Markov Decision Process (MDP)
+    Neste tipo de caso, trabalhamos com o mundo sendo um mapa, e nosso agente tentando chegar a certos pontos do mapa onde exitem
+    recompensas. O objetivo do agente é encontrar a melhor recompensa.
+    formas de fazer isto:
+        considere o mapa abaixo onde exitem recompensas (os valores mais altos), punições(os valores mais baixos) e paredes (*) as quais o agente não pode passar:
+            . . . .  5
+            . * . .  .
+            4 * . *  *
+            . . ^ . -1
+        tudo o que é . o nosso player (^) pode andar sobre. A pergunta é: como ensina-lo a chegar até a maior recompensa?
+        Temos que ensina-lo a tomar uma decisão vendo seu contexto. Pensemos que ele pode andar em 4 direções, cima, direita, baixo e esquerda.
+        Neste caso, podemos ver que se ele estiver do lado de uma recompensa, ele iria ve-la e poderia pega-la. Mas e quando estamos longe dela?
+        Simples, nós indicamos o caminho mostrando que ele terá a recompensa se for por ali:
+            5 5 5 5  5
+            5 * 5 5  5
+            4 * 5 *  *
+            5 5 ^ 5 -1
+        temos um 5 em cada caminho possível de se seguir até nossa recompensa, indicando que se ele passar por alí, ele estará no caminho para a recompensa.
+        Não é preciso nem falar o quão inecificente é isto. Como podemos então fazer isto ficar funcional?
+        Pensemos no jogo de "frio ou quente" onde dizemos para uma pessoa vendada se está esquentando ou esfriando a busca dela pelo seu objetivo.
+        Podemos então fazer algo parecido com isto "esfriando" a recompensa de cada quadrado quanto mais longe ele está da recompensa:
+            2 1 3 4  5
+            3 * 2 3  4
+            4 * 1 *  *
+            3 2 ^ 0 -1
+        fica fácil de ver agora como que se chega até a melhor recompensa. Entretanto temos um novo problema neste método: para chegarmos a maior recompensa, o 5,
+        devemos passar por 1-2-3-4-5, já para chegarmos a 4, passamos por 2-3-4, assim ir para a recompensa 4 é mais atrativo no início do que ir para a 5, mesmo que a 5
+        seja maior no final das contas.
+
+        Uma outra abordagem também válida é o termo de desconto, que se baseia no seguinte: ter a recompensa agora é melhor que uma promessa futura dela. Assim temos um termo de desconto < 0 que é multiplicado pelo valor da célula visinha no mundo.
+        Não mais um valor fixo é removido, mas sim um termo de desconto é multiplicado, assim, pensando num termo de desconto de 0.9:
+            3,24 2,9 4,0   4,5   5
+            3,6  *   3,6   4,05  4,5
+            4    *   3,2   *     *
+            3,6  2,9  ^    -0.9  -1
+
+        neste caso, esta abordagem solucionou nosso problema anterior, mas isto não é uma regra.
+
+* The Bellman equation
+    A equação de Bellman é uma regra para ensinar nosso agente a chegar até a recompensa combinando as duas regras acima que definem o valor dos quadradinhos.
+    A primeira regra acima pode ser escrita como: V(s) = dist(s, a) + V(a) => Valor do novo estado = distância do estado atual até a recompensa (a) + valor da recompensa a
+    A segunda regra pode ser descrita como: V(s) = g * V(a) => Valor do novo estado = termoDeDesconto * Valor da recompensa
+
+    Assim a regra de Bellman é dada por:
+        V(s) = dist(s, a) + g  * V(a)
+    
+    Para construirmos um mapa com esta regra, nós devemos permitir que nosso agente ande livremente pelo mundo tentando calcular o valor de cada quadrado.
+    No final, em um certo momento desconhecido, ele irá preencher todo o mundo corretamente respeitando a regra de bellman, e então ele achará o caminho para a melhor recompensa.
+    Como visto, esta equação sempre irá nos levar até o melhor ponto, mas leva um custo habsurdo para isto.
+
+    Existe um termo a mais que não vamos entrar agora, mas que pode ser adcionado a esta regra que é a probabilidade do agente não respeitar a regra, ou seja, partir por um caminho diferente
+    mesmo vendo o caminho correto. Isto torna esta equação bem mais facinante.
+
+* Q-Networks (utilizado no pytorch)
+    """
+        Antes de adentrarmos aqui, vamos ver a diferença entre problemas estocasticos e determinísticos.
+        Imagine que temos um agente em um mundo onde a sua direita há 10 reais. e em cima 1000 reais:
+
+            . . . . 1000
+            . . . . .
+            . ^ . . 10
+
+        imagine que o agente conhece o caminho até os 10 reais.
+        Uma solução determinística (que vem de determinação, ou seja, agir por conta de uma causa) dirá: Sempre ande para a direita.
+        Entretanto isto claramente nos faz perder o nosso objetivo maior, que é os 1000 reais. Como conseguir ele então?
+        A solução para isto é uma abordágem estocastica (que é o mesmo que aleatório).
+        Em uma abordageme estocástica, diremos ao agente: com uma grande probabilidade você deve seguir para a direita, mas com uma outra probabilidade menor você deve também seguir para alguma outra posição.
+        Ela funciona mais como um conselho, deixando chances do ente nos desobedecer, o que faz com que seja possível encontrar outros caminhos que possam levar, quem sabe, até o maior ganho.
+    
+        *Pensamento: e se adcionassemos o conceito de direção? nós temos um objetivo determinístico que é chegar a coordenada (x, y), e nós seguimos nesta direção, mas por outro caminho, como fazemos quando temos uma via interditada.
+            como uma rede neural se comportaria nesta cituação?
+    """
+
+    Podemos trabalhar com uma rede neural que compreenda exatamente como nós jogamos o jogo de frio ou quente.
+    Ela entende que se uma pontuação é alta em tal coordenada, coordenadas próximas também serão altas, e o inverso também é verdadeiro.
+    Assim ela tenta imaginar uma previsão do mapa de forma que seja possível uma aproximação da realidade sem ser necessário percorrer todo o mapa centenas de vezes.
+    Este tipo de rede neural também é chamada de Q-networks.
+
+    Vamos compreender melhor como esta rede funcionará. Basicamente sempre iremos desejar que ela cumpra a regra de bellman.
+    Imaginemos o seguinte cenário, nós pegamos o mapa abaixo, e passamos a coordenada central dele para uma rede neural não treinada:
+        . . .                                                   .  .  .
+        . . . => passando para a rede, ela retorna um valor =>  . 0,2 .
+        . . .                                                   .  .  .
+    
+    agora temos que passar também os visinhos para a rede neural, que retorna:
+          .   1.3   .
+        -2,7  0,2  3,2
+          .   4,9   .
+    agora nosso objetivo é que o valor central (aquele primeiro que a rede passou) esteja de acordo com a regra de bellman, então vamos ajusta-lo.
+    Pela regra de belman, o maior valor vizinho será a distância do seu estado atual até ele, somado com este estado visinho vezes o termo de desconto (que vamos usar 1 para facilitar a conta).
+    assim: V(s) = -1 + 4,9 * termoDeDesconto = -1 + 4,9 * 1 = 3,9
+    Então substituímos no mapa:
+          .   1.3   .
+        -2,7  3,9  3,2
+          .   4,9   .
+
+    assim nossa função de erro da rede neural será:
+    (Valor_Dado_Pela_Rede - Valor_Correto_Calculado_Com_Os_Dados_Da_Rede)^2
+
+    Podemos ainda trabalhar com uma rede neural que indique caminhos para nós. ou seja: se em uma certa coordenada do mapa a probabilidade estocastica de se mover para cima é alta,
+    então em toda esta região a probabilidade deve ser alta também de se mover para cima, e quanto mais longe desta região, menor esta probabilidade ficará.
+* Policy Gradients
